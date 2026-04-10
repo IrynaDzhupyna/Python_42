@@ -1,0 +1,34 @@
+class   Plant:
+    def __init__(self, name: str, s_height: float, s_age: int) -> None:
+        self.name = name
+        self.s_height = s_height
+        self.s_age = s_age
+
+    def grow(self) -> float:
+        self.growing = 0.8
+        self.s_height += self.growing
+        return self.s_height
+
+    def age(self) -> int:
+        self.s_age += 1
+        return self.s_age
+
+    def show(self) -> str:
+        return(f"{self.name}: {self.s_height:.1f}cm, {self.s_age} days old")
+
+def main() -> None:
+    plants = [
+        Plant("Rose", 25, 30),
+        Plant("Oak", 200, 365),
+        Plant("Cactus", 5, 90),
+        Plant("Sunflower", 80, 45),
+        Plant("Fern", 15, 120)
+
+    ]
+    for plant in plants:
+        print("Created: " + f"{plant.show()}")
+        #print(f"{plant.show()}")
+
+
+if __name__ == "__main__":
+    main()
