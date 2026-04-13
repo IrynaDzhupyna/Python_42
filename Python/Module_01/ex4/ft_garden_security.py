@@ -1,4 +1,4 @@
-class   Plant:
+class Plant:
     def __init__(self, name: str, height: float, age: int) -> None:
         self.name = name
         self.__height = height
@@ -33,8 +33,7 @@ class   Plant:
 def main():
     plant = Plant("Rose", 15, 10)
     print("=== Garden Security System ===")
-    print(f"{plant.show()}")
-    print()
+    print(f"Plant created: {plant.show()}\n")
     plant.set_height(25)
     plant.set_age(30)
     print()

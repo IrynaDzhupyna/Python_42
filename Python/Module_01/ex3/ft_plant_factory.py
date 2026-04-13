@@ -1,4 +1,4 @@
-class   Plant:
+class Plant:
     def __init__(self, name: str, s_height: float, s_age: int) -> None:
         self.name = name
         self.s_height = s_height
@@ -14,7 +14,8 @@ class   Plant:
         return self.s_age
 
     def show(self) -> str:
-        return(f"{self.name}: {self.s_height:.1f}cm, {self.s_age} days old")
+        return (f"{self.name}: {self.s_height:.1f}cm, {self.s_age} days old")
+
 
 def main() -> None:
     plants = [
@@ -23,11 +24,10 @@ def main() -> None:
         Plant("Cactus", 5, 90),
         Plant("Sunflower", 80, 45),
         Plant("Fern", 15, 120)
-
     ]
+    print("=== Plant Factory Output ===")
     for plant in plants:
-        print("Created: " + f"{plant.show()}")
-        #print(f"{plant.show()}")
+        print(f"Created: {plant.show()}")
 
 
 if __name__ == "__main__":
