@@ -7,40 +7,37 @@ def garden_operations(operation_number):
         open('/non/existent/file')
     elif operation_number == 3:
         'abc' + 10
-    return
+    else:
+        return
 
-def test_error_types():
+
+def test_error_types(i):
     try:
-        garden_operations(0)
+        garden_operations(i)
     except ValueError:
-        return ("Caught ValueError: invalid literal for int() with base 10: 'abc'")
-
-    try:
-        garden_operations(1)
+        return ("Caught ValueError: invalid literal for int() "
+                "with base 10: 'abc'")
     except ZeroDivisionError:
         return ("Caught ZeroDivisionError: division by zero")
-    '''while i != 5:
-        try:
-            garden_operations(i)
-        except (ValueError, ZeroDivisionError, FileNotFoundError, TypeError):
-            if ValueError:
-                print ("Caught ValueError: invalid literal for int() with base 10: 'abc'")
-            elif ZeroDivisionError:
-                print ("Caught ZeroDivisionError: division by zero")
-            elif FileNotFoundError:
-                print ("Caught FileNotFoundError: [Errno 2] No such file or directory: '/non/existent/file'")
-            elif TypeError:
-                print ('Caught TypeError: can only concatenate str (not "int") to str')
-            else:
-                print ("Operation completed successfully")'''
+    except FileNotFoundError:
+        return ("Caught FileNotFoundError: [Errno 2] "
+                "No such file or directory: '/non/existent/file'")
+    except TypeError:
+        return ('Caught TypeError: '
+                'can only concatenate str (not "int") to str')
+    else:
+        return ("Operation completed successfully")
 
 
 def main() -> None:
+    print("=== Garden Error Types Demo ===")
     i = 0
-    for i in range(5):
-        print(f"Testing operation {i}")
-        print(f"{test_error_types()}")
+    while i < 5:
+        print(f"Testing operation {i}...")
+        print(f"{test_error_types(i)}")
         i += 1
+    print("\nAll error types tested successfully!")
+
 
 if __name__ == "__main__":
     main()
