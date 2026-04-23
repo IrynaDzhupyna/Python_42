@@ -1,5 +1,4 @@
 import sys
-import typing
 
 
 '''def create_test_file():
@@ -24,18 +23,17 @@ def read_file(file_name) -> str | None:
     try:
         with open(file_name, "r") as file:
             content = file.read()
-    except (FileNotFoundError, NotADirectoryError, PermissionError, OSError) as e:
-        print_error(f"Error opening file '{file_name}': {e}")
-        return
+    except (FileNotFoundError, NotADirectoryError,
+            PermissionError, OSError) as e:
+        return print_error(f"Error opening file '{file_name}': {e}")
 
     print("_ _ _\n")
     print(content, end="")
     print("\n_ _ _\n")
-    print(f"File '{file_name}' closed.")
+    print(f"File '{file_name}' closed.\n")
     return content
 
 
-# need type hint
 def transform_data(content: str) -> str:
     transformed_lines = [line + "#" for line in content.splitlines()]
     transformed_content = "\n".join(transformed_lines)
@@ -53,12 +51,14 @@ def copy_file(transformed_content: str) -> None:
     if not new_name:
         return print("Not saving data.")
 
+    print(f"Saving data to '{new_name}'")
     try:
         with open(new_name, "w") as new_file:
             new_file.write(transformed_content)
-            print(f"Saving data to '{new_name}'")
-    except (FileNotFoundError, NotADirectoryError, PermissionError, OSError) as e:
+    except (FileNotFoundError, NotADirectoryError,
+            PermissionError, OSError) as e:
         print_error(f"Error creating file '{new_name}': {e}")
+        print("Data not saved.")
         return
     print(f"Data saved in file '{new_name}'.")
 
