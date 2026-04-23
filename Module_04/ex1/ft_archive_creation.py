@@ -35,21 +35,37 @@ def read_file(file_name) -> None:
 
 # need type hint
 def transform_data(file_name: str) -> None:
+    print("Transform data:")
+    print("_ _ _\n")
     with open(file_name, "r") as file:
-        lines: List[str] = file.readlines()
-
-    new_lines: List[str] = [line.rstrip("\n") + "#\n" for line in lines]
+        lines = file.read()
 
     with open(file_name, "w") as file:
-        file.writelines(new_lines)
+        for line in lines:
+            for letter in line:
+                if letter == "\n":
+                    letter = "#\n"
+                file.write(letter)
 
     with open(file_name, "r") as file:
-        print("Transformed data: \n")
-        for line in lines:
-            print(line)
-        # new_lines = [line.rstrip("\n") + "#" for line in file]
-        # new_lines = [line.append("\n") for line in file]
-        # print(new_lines)
+        for line in file:
+            print(line, end="")
+    print("\n_ _ _\n")
+
+def copy_file(file_name: str) -> None:
+    new_name = input("Enter new file name (or empty): ")
+    if not new_name:
+        return print("Not saving data.")
+    else:
+        if new_name and not new_name.endswith(".txt"):
+            new_name += ".txt"
+        print(f"Saving data to '{new_name}'")
+        with open(new_name, "w") as new_file:
+            with open(file_name, "r") as old_file:
+                for line in old_file:
+                    new_file.write(line)
+        print(f"Data saved in file '{new_name}'.")
+            
 
 
 def main() -> None:
@@ -60,6 +76,8 @@ def main() -> None:
         return print(f"Usage {sys.argv[0]} <file>")
     read_file(file_name)
     transform_data(file_name)
+    copy_file(file_name)
+    
 
     
 
