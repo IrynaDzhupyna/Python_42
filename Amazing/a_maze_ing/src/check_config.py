@@ -26,11 +26,11 @@ def fill_the_dict(content):
     try:
         for line in lines:
             key, value = line.split("=", 2)
+            dictunary[key] = value
             print(key, value)
     except ValueError:
         return print_error("not enough values to unpack")
     else:
-        dictunary[key] = value
         return dictunary
 
 
@@ -45,11 +45,7 @@ def main():
         return print_error("Problem in reading a file")
     # create a dict out of content
     our_dict = fill_the_dict(content)
-    for pair in our_dict:
-        print(pair)
-    
-    
-
+    print(our_dict)
 
 if __name__ == "__main__":
     main()

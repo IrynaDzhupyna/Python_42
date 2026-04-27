@@ -1,7 +1,7 @@
 SRC = src
 
 NAME = $(SRC)/a_maze_ing.py
-CONFIG = config.txt
+CONFIG = $(SRC)/config.txt
 
 VENV = .venv
 
@@ -24,13 +24,13 @@ clean:
 
 lint:
 	uvx flake8 $(SRC)
-	uvx mypy $(SRC)
+	uv run mypy $(SRC)
 
 lint-strict:
 	uvx flake8 $(SRC)
-	uvx mypy --strict $(SRC)
+	uv run mypy --strict $(SRC)
 
 test:
-	uvx pytest 
+	uv run pytest 
 
 .PHONY: run install debug clean lint lint-strict test

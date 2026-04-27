@@ -15,7 +15,84 @@
 | ENTRY | Entry coordinates (x,y) | ENTRY=0,0 |
 | EXIT | Exit coordinates (x,y) | EXIT = 19,14 |
 | OUTPUT_FILE | Output filename | OUTPUT_FILE=maze.txt |
-| PERFECT | is the mazwe perfect ? | PERFECT=True |
+| PERFECT | is the maze perfect ? | PERFECT=True |
+
+The maze is basically a grid of the following size : width x height.
+We set up the following condition :
+- width cannot be over 429 cells long
+- height cannot be over 429 cells high
+- the grid cannot have more than 32000 cells
+
+In order to be able to set up the '42' pattern in our grid, we added as well :
+- width cannot be under 7 cells long
+- height cannot be under 9 cells high
+
+And the *entry* cell and the *exit* cell cannot be in the 42 pattern.
+
+Example :
+
+| **Key** | **Value** |
+| ------- | --------- |
+| WIDTH | 20 |
+| HEIGHT | 15 |
+| ENTRY | 0,0 |
+| EXIT | 19,14 |
+| PERFECT | True |
+
+
+
+```
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+| A |   |                       |                       |       |           |
++   +   +   +   +---+---+---+   +   +---+   +---+---+   +   +   +---+---+   +
+|   |       |   |               |   |   |       |   |       |   |       |   |
++   +---+---+   +   +---+---+---+   +   +---+   +   +---+---+   +   +   +   +
+|           |   |   |           |           |   |                   |       |
++---+---+   +   +   +   +---+   +---+---+   +   +---+   +---+---+---+---+   +
+|           |   |   |   |           |       |       |           |       |   |
++   +---+---+   +---+   +   +---+---+   +---+---+   +---+---+---+   +   +---+
+|   |           |       |           |   |       |           |       |       |
++   +---+   +   +   +---+---+---+   +   +   +---+---+---+   +   +---+---+   +
+|       |   |   |   |           |       |           |   |       |           |
++---+   +   +---+   +   +---+   +---+---+---+   +   +   +---+---+   +---+   +
+|       |   |       |   |                       |       |           |   |   |
++   +---+   +   +---+   +   +---+---+---+---+---+---+---+   +---+---+   +   +
+|       |   |   |   |   |XXX    |XXX     XXX XXX XXX    |           |       |
++---+   +   +   +   +   +---+   +   +---+---+---+---+   +---+---+   +---+---+
+|   |   |       |       |XXX|   |XXX|       |    XXX|           |   |       |
++   +   +   +---+   +---+   +   +   +---+   +   +   +---+---+   +   +   +   +
+|   |   |   |   |        XXX|XXX|XXX    |XXX XXX|XXX        |   |       |   |
++   +   +   +   +---+   +---+   +---+   +---+---+---+   +---+   +---+---+   +
+|       |   |   |       |        XXX|    XXX        |   |       |           |
++   +---+   +   +   +---+   +---+   +---+---+---+   +   +   +---+   +---+   +
+|   |   |   |       |   |   |    XXX|    XXX|XXX XXX|               |   |   |
++   +   +   +---+   +   +   +   +---+   +   +   +---+---+---+---+---+   +   +
+|   |           |   |   |   |   |       |   |           |               |   |
++   +---+---+   +   +   +   +   +   +---+   +---+---+   +---+---+   +   +   +
+|       |   |   |       |   |   |   |       |       |       |       |   |   |
++---+   +   +   +---+---+   +   +   +   +---+   +   +---+   +   +---+---+   +
+|   |   |   |               |   |   |   |       |           |   |           |
++   +   +   +   +---+---+---+   +   +   +   +---+---+---+---+   +   +---+---+
+|   |   |       |       |   |   |   |       |       |               |       |
++   +   +---+---+   +   +   +   +   +---+---+   +---+   +---+---+---+---+   +
+|   |               |   |   |   |   |                   |               |   |
++   +---+---+---+---+   +   +   +   +---+   +---+---+---+   +---+---+   +   +
+|                   |   |       |       |   |           |   |       |       |
++   +---+---+---+   +   +---+---+---+   +   +---+   +   +   +   +---+---+   +
+|               |                       |           |       |             B |
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+```
+
+The maze must be written in the output file using one hexadecimal digit per cell, where each digit encodes which walls are closed:
+
+| **Bit** | **Direction** |
+| ------- | ------------- |
+| 0 (LSB) | North |
+| 1 | East |
+| 2 | South |
+| 3 | West |
+
+A wall being closed sets the bit to 1, open means 0. We then have 16 different cases from 0000 (all 4 walls are opened) to 1111 (all 4 walls are closed).
 
 ### Thinking and buildings
 
@@ -37,9 +114,6 @@ class Cell:
             "E": True,
             "W": True
         }
-
-*IDEA : the point of a maze is to connect a unique **ENTRY** cell to a unique **EXIT** cell. In order to make the locations of them more convenient, we can assume that the **ENTRY** cell can be the top-left one (x,y)=(0,0) and the **EXIT** cell can be the bottom-right one (x,y)=(WIDTH,HEIGHT).*
-
 
 
 # INSTRCUTIONS
@@ -70,3 +144,4 @@ General [overview](https://jbinternational.co.uk/article/view/1366) git team wor
 
 Very useful artcile about the different Git [commands](https://www.datacamp.com/blog/git-commands?utm_cid=19589720821&utm_aid=152984011134&utm_campaign=230119_1-ps-other~dsa-tofu~all_2-b2c_3-emea_4-prc_5-na_6-na_7-le_8-pdsh-go_9-nb-e_10-na_11-na&utm_loc=9043091-&utm_mtd=-c&utm_kw=&utm_source=google&utm_medium=paid_search&utm_content=ps-other~emea-en~dsa~tofu~blog~data-engineering&gad_source=1&gad_campaignid=19589720821&gclid=CjwKCAjwhqfPBhBWEiwAZo196g58OT_24cZ07ACLZgSU2a4v6nKhyMlkmBGR6xKwfJAo9rTTRHbs3RoCvawQAvD_BwE)
 
+For a better understanding about uv in Python, we used this [article](https://realpython.com/python-uv/)
