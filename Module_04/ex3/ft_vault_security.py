@@ -1,44 +1,34 @@
-# secure acces to any file
-#   for reading or writing
-#   returns tuple (True|False, str)
-#       True + content of file
-#       False + error message
-# str == "w" or "r"
-def create_test_file(file_name):
-    lines = [
-        "[FRAGMENT 001] Digital preservation protocols established 2087",
-        "[FRAGMENT 002] Knowledge must survive the entropy wars",
-        "[FRAGMENT 003] Every byte saved is a victory against oblivion"
-    ]
-    with open(f"{file_name}", "w") as file:
-        for line in lines:
-            file.write(f"{line}\n")
-
-
-def secure_archive(file_name, str, new_content=None) -> tuple:
+def secure_archive(file_name, string=None, new_content=None) -> tuple:
     print("=== Cyber Archives Security ===")
     try:
-        with open(f"{file_name}", str) as file:
-            if str == "r":
+        with open(file_name, string) as file:
+            if string == "r":
+                print("Using 'secure_archive' to read from regular file")
                 content = file.read()
-            elif str == "w":
-                file.write(new_content)
-    except (FileNotFoundError, NotADirectoryError):
-        print(f"Error opening file '{file_name}': "
-              f"[Errno 2] No such file or directory: '{file_name}'")
+                return (bool(content), content)
+
+            elif string == "w":
+                print("Using 'secure_archive' "
+                      "to write previous content to a new file")
+                with open(file_name, "r") as file_1:
+                    content = file_1.read()
+
+                with open("new_file.txt", "w") as file_2:
+                    file_2.write(content)
+
+                return (bool(content), content)
+    except (FileNotFoundError, NotADirectoryError, IsADirectoryError):
+        print("Using 'secure_archive' to read from nonexisting file")
+        return ("False", f"[Errno 2] No such file or directory: '{file_name}'")
     except PermissionError:
-        print(f"Error opening file '{file_name}': "
-              f"[Errno 13] Permission denied: '{file_name}'")
+        print("Using 'secure_archive' to read from inaccessible file")
+        return ("False", f"[Errno 13] Permission denied: '{file_name}'")
 
 
 def main() -> None:
-    new_file = create_test_file("ancient_fragment.txt")
-    
-    with open(f"{new_file}", "r") as f:
-        content = f.read()
-        for line in content:
-            print(line)
-    secure_archive(new_file, "r")
+    print(secure_archive("test.txt", "r"))
+    print(secure_archive("ancient_fragment.txt", "w"))
+
 
 if __name__ == "__main__":
     main()

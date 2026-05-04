@@ -1,5 +1,4 @@
 import sys
-import typing
 
 
 def create_test_file():
@@ -52,6 +51,7 @@ def transform_data(file_name: str) -> None:
             print(line, end="")
     print("\n_ _ _\n")
 
+
 def copy_file(file_name: str) -> None:
     new_name = input("Enter new file name (or empty): ")
     if not new_name:
@@ -65,7 +65,6 @@ def copy_file(file_name: str) -> None:
                 for line in old_file:
                     new_file.write(line)
         print(f"Data saved in file '{new_name}'.")
-            
 
 
 def main() -> None:
@@ -77,10 +76,6 @@ def main() -> None:
     read_file(file_name)
     transform_data(file_name)
     copy_file(file_name)
-    
-
-    
-
 
 
 if __name__ == "__main__":
