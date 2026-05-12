@@ -2,6 +2,7 @@ import sys
 
 
 def main() -> None:
+    # get the name from argv - str
     try:
         file_name = sys.argv[1]
     except IndexError:
@@ -11,20 +12,21 @@ def main() -> None:
     print(f"Accessing file '{file_name}'")
 
     try:
-        with open(file_name, "r") as file:
-            lines = file.read()
+        file = open(file_name, "r")
     except (FileNotFoundError, NotADirectoryError):
-        print(f"Error opening file '{file_name}': "
-              f"[Errno 2] No such file or directory: '{file_name}'")
+        print(f"[Errno 2] No such file or directory: '{file_name}")
+    except IsADirectoryError:
+        print(f"[Errno 21] Is a directory")
     except PermissionError:
         print(f"Error opening file '{file_name}': "
               f"[Errno 13] Permission denied: '{file_name}'")
     else:
-        print("_ _ _\n")
-        print(lines, end="")
-        print("\n_ _ _\n")
+        content = file.read()
+        print("---\n")
+        print(content, end="")
+        print("\n---\n")
+        file.close()
         print(f"File '{file_name} closed.")
-
 
 if __name__ == "__main__":
     main()
