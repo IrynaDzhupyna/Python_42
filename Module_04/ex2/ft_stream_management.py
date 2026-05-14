@@ -21,10 +21,9 @@ def read_file(file_name) -> str | None:
     print(f"Accessing file '{file_name}'")
 
     try:
-        with open(file_name, "r") as file:
-            content = file.read()
-    except (FileNotFoundError, NotADirectoryError,
-            PermissionError, OSError) as e:
+        file = open(file_name, "r")
+        content = file.read()
+    except OSError as e:
         return print_error(f"Error opening file '{file_name}': {e}")
 
     print("_ _ _\n")
@@ -48,15 +47,16 @@ def copy_file(transformed_content: str) -> None:
     sys.stdout.write("Enter new file name (or empty): ")
     sys.stdout.flush()
     new_name = sys.stdin.readline().rstrip("\n")
-    if not new_name:
-        return print("Not saving data.")
+    if not new_name or new_name == " ":
+        print("Not saving data.")
+        return
 
     print(f"Saving data to '{new_name}'")
     try:
-        with open(new_name, "w") as new_file:
-            new_file.write(transformed_content)
-    except (FileNotFoundError, NotADirectoryError,
-            PermissionError, OSError) as e:
+        new_file = open(new_name, "w")
+        new_file.write(transformed_content)
+        new_file.close()
+    except OSError as e:
         print_error(f"Error creating file '{new_name}': {e}")
         print("Data not saved.")
         return
