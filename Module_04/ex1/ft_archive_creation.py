@@ -1,47 +1,54 @@
 import sys
 
 
-def read_file(file_name) -> None:
+def read_file(file_name: str) -> str:
+
     print("=== Cyber Archives Recovery & Preservation ===")
     print(f"Accessing file '{file_name}'")
 
     try:
-        with open(file_name, "r") as file:
-            lines = file.read()
-    except (FileNotFoundError, NotADirectoryError):
-        print(f"Error opening file '{file_name}': "
-              f"[Errno 2] No such file or directory: '{file_name}'")
-    except PermissionError:
-        print(f"Error opening file '{file_name}': "
-              f"[Errno 13] Permission denied: '{file_name}'")
+        file = open(file_name, "r")
+    except OSError as e:
+        print(f"Error opening file '{file_name}': {e}")
     else:
-        print("_ _ _\n")
-        print(lines, end="")
-        print("\n_ _ _\n")
-        print(f"File '{file_name} closed.")
-
-
-# need type hint
-def transform_data(file_name: str) -> None:
-    print("Transform data:")
-    print("_ _ _\n")
-    with open(file_name, "r") as file:
         lines = file.read()
+        file.close()
+        print("---\n")
+        print(lines, end="")
+        print("\n---\n")
+        print(f"File '{file_name} closed.")
+        return lines
 
-    with open(file_name, "w") as file:
-        for line in lines:
-            for letter in line:
-                if letter == "\n":
-                    letter = "#\n"
-                file.write(letter)
 
-    with open(file_name, "r") as file:
-        for line in file:
-            print(line, end="")
+def transform_data(file_name: str, lines: str) -> None:
+
+    print("Transform data:")
+    print("---\n")
+
+    try:
+        file = open(file_name, "w")
+    except OSError as e:
+        print(f"Error writting in a file {file_name}: {e}")
+        return
+
+    for line in lines:
+        for letter in line:
+            if letter == "\n":
+                letter = "#\n"
+            file.write(letter)
+    try:
+        file = open(file_name, "r")
+    except OSError as e:
+        print(f"Error opening file '{file}': {e}")
+        return
+    for line in file:
+        print(line, end="")
+    file.close()
     print("\n_ _ _\n")
 
 
 def copy_file(file_name: str) -> None:
+
     new_name = input("Enter new file name (or empty): ")
     if not new_name:
         return print("Not saving data.")
@@ -49,10 +56,18 @@ def copy_file(file_name: str) -> None:
         if new_name and not new_name.endswith(".txt"):
             new_name += ".txt"
         print(f"Saving data to '{new_name}'")
-        with open(new_name, "w") as new_file:
-            with open(file_name, "r") as old_file:
-                for line in old_file:
-                    new_file.write(line)
+        try:
+            new_file = open(new_name, "w")
+        except OSError as e:
+            print(f"File {new_file} can not be open: {e}")
+        
+        try:
+            old_file = open(file_name, "r")
+        except OSError as e:
+            print("Error opening file '{file_name}': {e}")
+
+        for line in old_file:
+            new_file.write(line)
         print(f"Data saved in file '{new_name}'.")
 
 
@@ -61,8 +76,8 @@ def main() -> None:
         file_name = sys.argv[1]
     except IndexError:
         return print(f"Usage {sys.argv[0]} <file>")
-    read_file(file_name)
-    transform_data(file_name)
+    content = read_file(file_name)
+    transform_data(file_name, content)
     copy_file(file_name)
 
 
