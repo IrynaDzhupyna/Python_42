@@ -1,33 +1,35 @@
-def secure_archive(file_name, string=None,
-                   new_content=None) -> tuple[True | False, str]:
-    print("=== Cyber Archives Security ===")
+def secure_archive(file_name: str, string: str,
+                   new_content: str | None=None) -> tuple[bool, str]:
     try:
         if string == "r":
             with open(file_name, string) as file:
-                print("Using 'secure_archive' to read from regular file")
                 content = file.read()
-                return (bool(content), content)
+                return (True, content)
 
-        elif string == "w":
+        elif string == "w" and new_content is not None:
             with open(file_name, string) as file:
                 file.write(new_content)
                 return (True, "Content successfully written to file")
 
-    except (FileNotFoundError, NotADirectoryError):
-        print("Using 'secure_archive' to read from nonexisting file")
-        return (False, "[Errno 2] No such file or directory")
+        return (False, "Invalid operation")
 
-    except IsADirectoryError:
-        print("Using 'secure_archive' to read from directory not a file")
-        return (False, "[Errno 2] Is a directory, not a file")
-
-    except PermissionError:
-        print("Using 'secure_archive' to read from inaccessible file")
-        return (False, f"[Errno 13] Permission denied: '{file_name}'")
-
+    except OSError as e:
+        return (False, str(e))
 
 def main() -> None:
-    print(secure_archive("test.txt", "w", "hello"))
+    print("=== Cyber Archives Security ===")
+    print("Using 'secure_archive' to read from a nonexistent file:")
+    print(secure_archive("/not/existing/file", "r"))
+
+    print("Using 'secure_archive' to read from an inaccessible file:")
+    print(secure_archive("/etc/master.passwd", "r"))
+
+    print("Using 'secure_archive' to read from a regular file:")
+    result = secure_archive("ancient_fragment.txt", "r")
+    print(result)
+
+    print("Using 'secure_archive' to write previous content to a new file:")
+    print(secure_archive("new_fragment.txt", "w", result[1]))
 
 
 if __name__ == "__main__":

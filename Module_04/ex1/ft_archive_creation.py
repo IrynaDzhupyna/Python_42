@@ -1,17 +1,6 @@
 import sys
 
 
-def create_test_file():
-    lines = [
-        "[FRAGMENT 001] Digital preservation protocols established 2087",
-        "[FRAGMENT 002] Knowledge must survive the entropy wars",
-        "[FRAGMENT 003] Every byte saved is a victory against oblivion"
-    ]
-    with open("ancient_fragment.txt", "w") as file:
-        for line in lines:
-            file.write(f"{line}\n")
-
-
 def read_file(file_name) -> None:
     print("=== Cyber Archives Recovery & Preservation ===")
     print(f"Accessing file '{file_name}'")
@@ -68,7 +57,6 @@ def copy_file(file_name: str) -> None:
 
 
 def main() -> None:
-    create_test_file()
     try:
         file_name = sys.argv[1]
     except IndexError:
