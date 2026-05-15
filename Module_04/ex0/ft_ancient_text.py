@@ -22,7 +22,7 @@ def main() -> None:
     print("---\n")
     print(content, end="")
     print("\n---")
-    print(f"File '{file_name} closed.")
+    print(f"File '{file_name}' closed.")
 
 
 if __name__ == "__main__":

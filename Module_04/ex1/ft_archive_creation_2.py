@@ -1,6 +1,6 @@
 import sys
 
-def read_the_file(file_name: str) -> str:
+def read_the_file(file_name: str) -> str | None:
     try:
         file = open(file_name, "r")
         content = file.read()
@@ -24,7 +24,6 @@ def write_to_the_file(file_name: str, content: list) -> None:
         file.close()
     except OSError as e:
         print(f"{e}")
-    return file
 
 def main() -> None:
     try:
@@ -53,9 +52,7 @@ def main() -> None:
         return
 
     print(f"Saving data to '{new_file_name}'.")
-    new_file = write_to_the_file(new_file_name, new_content)
-    if not new_file:
-        print("Not saving data")
+    write_to_the_file(new_file_name, new_content)
     print(f"Data saved in file '{new_file_name}'")
     
 
