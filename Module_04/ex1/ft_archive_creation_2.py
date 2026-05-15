@@ -4,27 +4,26 @@ def read_the_file(file_name: str) -> str:
     try:
         file = open(file_name, "r")
         content = file.read()
+        file.close()
     except OSError as e:
         print(f"Error opening file '{file_name}': {e}")
-        return
-    file.close()
+        return None
     return content
 
 def modify_the_content(content: str) -> str:
-    lines = content.split()
+    lines = content.splitlines()
     transformed = []
     for line in lines:
         transformed.append(line + "#")
-    return transformed
+    return "\n".join(transformed)
 
-def write_to_the_file(file_name: str, content: list) -> str | None:
+def write_to_the_file(file_name: str, content: list) -> None:
     try:
         file = open(file_name, "w")
-        for line in content:
-            file.write(line)
+        file.write(content)
+        file.close()
     except OSError as e:
         print(f"{e}")
-    file.close()
     return file
 
 def main() -> None:
@@ -32,6 +31,7 @@ def main() -> None:
         file_name = sys.argv[1]
     except IndexError:
         print(f"Usage: {sys.argv[0]} <file>")
+        return
 
     print("=== Cyber Archives Recovery & Preservation ===")
     print(f"Accessing file '{file_name}'")
@@ -45,8 +45,7 @@ def main() -> None:
     new_content = modify_the_content(content)
     print("Transform data:")
     print("---\n")
-    for line in new_content:
-        print(line)
+    print(new_content)
     print("\n---")
     new_file_name = input("Enter new file name (or empty): ")
     if not new_file_name:
