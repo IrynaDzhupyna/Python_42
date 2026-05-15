@@ -1,68 +1,45 @@
 import sys
 
 
-def read_file(file_name: str) -> str:
-
-    print("=== Cyber Archives Recovery & Preservation ===")
-    print(f"Accessing file '{file_name}'")
+def read_file(file_name: str) -> str | None:
+    # reads the original
+    # transforms in memory
+    # asks where to save
 
     try:
         file = open(file_name, "r")
     except OSError as e:
         print(f"Error opening file '{file_name}': {e}")
-    else:
-        lines = file.read()
-        file.close()
-        print("---\n")
-        print(lines, end="")
-        print("\n---\n")
-        print(f"File '{file_name} closed.")
-        return lines
-
-
-def transform_data(file_name: str, lines: str) -> None:
-
-    print("Transform data:")
-    print("---\n")
-
-    try:
-        file = open(file_name, "w")
-    except OSError as e:
-        print(f"Error writting in a file {file_name}: {e}")
         return
-
-    for line in lines:
-        for letter in line:
-            if letter == "\n":
-                letter = "#\n"
-            file.write(letter)
-    try:
-        file = open(file_name, "r")
-    except OSError as e:
-        print(f"Error opening file '{file}': {e}")
-        return
-    for line in file:
-        print(line, end="")
+    
+    lines = file.read()
     file.close()
-    print("\n_ _ _\n")
+    print("---\n")
+    print(lines, end="")
+    print("\n---\n")
+    print(f"File '{file_name} closed.\n")
+    return lines
 
 
-def copy_file(file_name: str) -> None:
+def transform_data(content: str) -> None:
 
-    new_name = input("Enter new file name (or empty): ")
-    if not new_name:
-        return print("Not saving data.")
-    else:
-        if new_name and not new_name.endswith(".txt"):
-            new_name += ".txt"
-        print(f"Saving data to '{new_name}'")
+    lines = content.split()
+    transformed = []
+    for line in lines:
+        transformed.append(line + "#")
+    "\n".join(transformed)
+    return transformed
+
+
+def copy_file(old_name: str, new_name: str) -> None:
+
         try:
             new_file = open(new_name, "w")
         except OSError as e:
             print(f"File {new_file} can not be open: {e}")
         
         try:
-            old_file = open(file_name, "r")
+            old_file = open(old_name, "r")
         except OSError as e:
             print("Error opening file '{file_name}': {e}")
 
@@ -76,9 +53,25 @@ def main() -> None:
         file_name = sys.argv[1]
     except IndexError:
         return print(f"Usage {sys.argv[0]} <file>")
+    
+    print("=== Cyber Archives Recovery & Preservation ===")
+    print(f"Accessing file '{file_name}'")
     content = read_file(file_name)
-    transform_data(file_name, content)
-    copy_file(file_name)
+
+    print("Transform data:")
+    print("---\n") 
+    lines = transform_data(content)
+    for line in lines:
+        print(line)
+
+    
+    new_name = input("Enter new file name (or empty): ")
+    if not new_name:
+        print("Not saving data.")
+        return
+    else:
+        print(f"Saving data to '{new_name}'")
+   # copy_file(file_name)
 
 
 if __name__ == "__main__":
