@@ -21,8 +21,8 @@ class DataProcessor(ABC):
     def output(self) -> tuple[int, str]:
         # outputs ingested data
         #   extracts the oldest pieces of data along with their rank
-        oldest_data = (self.storage, self.output_rank.pop(0))
-        self.output_data += 1
+        oldest_data = (self.output_rank, self.strage.pop(0))
+        self.output_rank += 1
         return oldest_data
 
 
@@ -34,9 +34,10 @@ class DataProcessor(ABC):
 class NumericProcessor(DataProcessor):
     """
         converts data into str and stores it internally,
-        waiting to be extracted using the output method"""
-    def __init__(self, data: int | float | list: Any):
-        self.data = data
+        waiting to be extracted using the output method
+
+        resives data via ingest
+        """
 
     def validate(self, data: Any) -> bool:
         # int, float and list of both types also mixed
@@ -52,7 +53,7 @@ class NumericProcessor(DataProcessor):
         if not self.validate(data):
             raise TypeError ("Expected int, float of list of these types")
         
-        if isinstance(data, (int|float):
+        if isinstance(data, (int, float)):
             self.storage.append(str(data))
 
         elif isinstance(data, list):
@@ -70,10 +71,15 @@ class TextProcessor(DataProcessor):
         return False
 
 
-    def ingest(self, data: str | list[str,str]) -> list[str, str] | None:
-
-        if not validate(data):
+    def ingest(self, data: str | list[str]) -> None:
+        # stores str or list(str)
+        if not self.validate(data):
             raise TypeError("Expected str or list of strings")
+        if isinstance(data, str):
+            self.storage.append(data)
+        elif isinstance(data, list):
+            for element in data:
+                self.storage.append(element)
 
 
 class LogProcessor(DataProcessor):
@@ -86,6 +92,16 @@ class LogProcessor(DataProcessor):
             and isinstance(k, str) and isinstance(v, str) for k, v in data.item():
                 return True
         return False
+
+
+    def ingest(self, data: dict[str, str]|list(dict[str, str]))-> None:
+        if not self.validate(data):
+            raise TypeError("Expected dict of str key-value pairs, and list of that type")
+        
+        if isinstance(data, dict) and all(isinstance(k, str)) 
+            and all(isinstance(v, str) for k, v in data:
+                for dict in list
+
 
 def main() -> None:
     num = NumericProcessor(5,
