@@ -26,11 +26,6 @@ class DataProcessor(ABC):
         return oldest_data
 
 
-
-# each spesialized class will need to override these methods
-#   overriders of validate haive the same signature as in DataProcessor
-#   overiders of ingest have their own specific signatures to match the types they expect
-#       if user doesn't validate the data before calling ingest, and data is invalid - raise exception
 class NumericProcessor(DataProcessor):
     """
         converts data into str and stores it internally,
@@ -49,7 +44,7 @@ class NumericProcessor(DataProcessor):
 
 
     def ingest(self, data: int|float|list[int|float]) ->  None:
-        # converts the data into string
+        # converts int/float/list[int|float] into string
         if not self.validate(data):
             raise TypeError ("Expected int, float of list of these types")
         
@@ -64,6 +59,7 @@ class NumericProcessor(DataProcessor):
 class TextProcessor(DataProcessor):
 
     def validate(self, data: Any) -> bool:
+        # str or list[str]
         if isinstance(data, str):
             return True
         if isinstance(data, list):
@@ -75,32 +71,37 @@ class TextProcessor(DataProcessor):
         # stores str or list(str)
         if not self.validate(data):
             raise TypeError("Expected str or list of strings")
+
         if isinstance(data, str):
             self.storage.append(data)
+
         elif isinstance(data, list):
             for element in data:
                 self.storage.append(element)
 
 
 class LogProcessor(DataProcessor):
+    """ dict[str, str], list[dict[str,str] """
 
     def validate(self, data: Any) -> bool:
-        if isinstance(data, dict) and all(isinstance(k, str)
-            and isinstance(v, str) for k, v in data.item():
-                return True
-        if isinstance(data, list) and isinstance(data, dict)
-            and isinstance(k, str) and isinstance(v, str) for k, v in data.item():
-                return True
+        if isinstance(data, dict):
+            return all(isinstance(k, str) and isinstance(v, str) for k, v in data.item())
+        if isinstance(data, list):
+            return all(self.validate(element) for element in data)
         return False
 
 
     def ingest(self, data: dict[str, str]|list(dict[str, str]))-> None:
+        # to str
         if not self.validate(data):
-            raise TypeError("Expected dict of str key-value pairs, and list of that type")
+            raise TypeError("Expected dict of str key-value pairs, or list of that type")
         
-        if isinstance(data, dict) and all(isinstance(k, str)) 
-            and all(isinstance(v, str) for k, v in data:
-                for dict in list
+        if isinstance(data, dict):
+            self.stored.append(str(data))
+
+        elif isinstance(data, list):
+            new = ''.join([str(element) for element in data])
+
 
 
 def main() -> None:
